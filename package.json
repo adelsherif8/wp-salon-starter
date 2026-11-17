@@ -6,7 +6,7 @@
     "watch": "tailwindcss -i salon-master/assets/src/input.css -o salon-master/assets/app.css --watch",
     "wp:start": "wp-env start",
     "wp:stop": "wp-env stop",
-    "wp:seed": "wp-env run cli wp eval-file demo/seed.php"
+    "wp:seed": "wp-env run cli wp eval-file wp-content/themes/salon-master/demo/seed.php"
   },
   "devDependencies": {
     "@tailwindcss/typography": "0.5.15",

@@ -15,7 +15,7 @@
   // Find your stylist: show cards matching the chosen level and location
   var form = document.querySelector('[data-stylist-filter]');
   if (form) {
-    var cards = Array.prototype.slice.call(document.querySelectorAll('[data-stylist]'));
+    var cards = Array.prototype.slice.call(document.querySelectorAll('[data-stylist-card]'));
     var count = form.querySelector('[data-stylist-count]');
     var apply = function () {
       var level = form.elements.level.value, loc = form.elements.location.value, shown = 0;

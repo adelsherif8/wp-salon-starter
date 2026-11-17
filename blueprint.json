@@ -1,0 +1,61 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "landingPage": "/",
+  "preferredVersions": {
+    "php": "8.2",
+    "wp": "latest"
+  },
+  "features": {
+    "networking": true
+  },
+  "steps": [
+    {
+      "step": "installPlugin",
+      "pluginData": {
+        "resource": "wordpress.org/plugins",
+        "slug": "advanced-custom-fields"
+      }
+    },
+    {
+      "step": "installTheme",
+      "themeData": {
+        "resource": "git:directory",
+        "url": "https://github.com/adelsherif8/wp-salon-starter",
+        "ref": "main",
+        "path": "salon-master"
+      },
+      "options": {
+        "activate": false,
+        "targetFolderName": "salon-master"
+      }
+    },
+    {
+      "step": "installTheme",
+      "themeData": {
+        "resource": "git:directory",
+        "url": "https://github.com/adelsherif8/wp-salon-starter",
+        "ref": "main",
+        "path": "salon-child-maison"
+      },
+      "options": {
+        "activate": true,
+        "targetFolderName": "salon-child-maison"
+      }
+    },
+    {
+      "step": "setSiteOptions",
+      "options": {
+        "permalink_structure": "/%postname%/"
+      }
+    },
+    {
+      "step": "wp-cli",
+      "command": "wp eval-file wp-content/themes/salon-master/demo/seed.php"
+    },
+    {
+      "step": "login",
+      "username": "admin",
+      "password": "password"
+    }
+  ]
+}

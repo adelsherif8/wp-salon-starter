@@ -8,7 +8,13 @@ It's a personal project that shows how I'd structure an agency theme library: on
 templates, data model, schema and tracking, and each client gets a small child theme with their brand.
 A fix in the parent reaches every site; a client's look never needs a new CSS build.
 
-<!-- screenshots coming -->
+**Live demo:** [open it in WordPress Playground](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/adelsherif8/wp-salon-starter/main/blueprint.json) (a real WordPress in your browser, with the themes and the demo salon installed; takes about 30 seconds to boot; logged in as admin so you can see the fields).
+
+![Home](docs/home.jpg)
+
+| Service menu | Find your stylist |
+| --- | --- |
+| ![Menu](docs/menu.jpg) | ![Stylists](docs/stylists.jpg) |
 
 ## What's in it
 
@@ -50,7 +56,14 @@ npx wp-env run cli wp plugin activate advanced-custom-fields
 npm run wp:seed      # demo salon: 2 locations, 8 services, 4 stylists, menu, front page
 ```
 
+Or without Docker, using the same blueprint as the live demo:
+```bash
+npx @wp-playground/cli server --blueprint=blueprint.json
+```
+
 ## How AI was used
 Built quickly with Claude Code from a brief: a parent/child theme library for salons, Tailwind with per-client
 tokens, menu / stylists / locations, booking links, local-search schema and GA4 events. One thing caught in
-review: a PHP 8-only `str_ends_with()` call in a theme that declares PHP 7.4 support.
+review: a PHP 8-only `str_ends_with()` call in a theme that declares PHP 7.4 support. Testing in a local
+WordPress Playground caught another: the stylist counter said 9 instead of 4, because the Book buttons also
+carried a `data-stylist` attribute and the filter counted them as stylists.

@@ -9,8 +9,8 @@ $set = function ( $id, $name, $value ) {
 	function_exists( 'update_field' ) ? update_field( $name, $value, $id ) : update_post_meta( $id, $name, $value );
 };
 $post = function ( $type, $title, $content = '', $order = 0 ) {
-	$existing = get_page_by_title( $title, OBJECT, $type );
-	return $existing ? $existing->ID : wp_insert_post( array( 'post_type' => $type, 'post_title' => $title, 'post_content' => $content, 'post_status' => 'publish', 'menu_order' => $order ) );
+	$found = get_posts( array( 'post_type' => $type, 'title' => $title, 'post_status' => 'any', 'numberposts' => 1, 'fields' => 'ids' ) );
+	return $found ? $found[0] : wp_insert_post( array( 'post_type' => $type, 'post_title' => $title, 'post_content' => $content, 'post_status' => 'publish', 'menu_order' => $order ) );
 };
 /** Placeholder portrait: soft colour + initials, generated with GD. */
 $portrait = function ( $post_id, $initials, $rgb ) {
