@@ -17,6 +17,9 @@
 	</div>
 	<p class="border-t border-paper/10 py-5 text-center text-xs opacity-60">&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?></p>
 </footer>
+<div class="book-bar fixed inset-x-0 bottom-0 z-40 translate-y-full border-t border-ink/10 bg-paper/95 p-3 backdrop-blur transition duration-300 md:hidden" data-book-bar>
+	<?php salon_book_button( array( 'context' => 'sticky-bar', 'class' => 'w-full' ) ); ?>
+</div>
 <?php wp_footer(); ?>
 </body>
 </html>

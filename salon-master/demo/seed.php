@@ -26,6 +26,20 @@ $portrait = function ( $post_id, $initials, $rgb ) {
 	set_post_thumbnail( $post_id, $att );
 };
 
+/** Import a demo photo shipped in assets/demo (Unsplash, see CREDITS.md) once, return its attachment ID. */
+$photo = function ( $name, $parent = 0 ) {
+	$found = get_posts( array( 'post_type' => 'attachment', 'meta_key' => '_salon_demo', 'meta_value' => $name, 'numberposts' => 1, 'fields' => 'ids' ) );
+	if ( $found ) { return $found[0]; }
+	$src = get_template_directory() . "/assets/demo/{$name}.jpg";
+	if ( ! file_exists( $src ) ) { return 0; }
+	$up = wp_upload_dir(); $dest = trailingslashit( $up['path'] ) . "salon-{$name}.jpg"; copy( $src, $dest );
+	$att = wp_insert_attachment( array( 'post_mime_type' => 'image/jpeg', 'post_title' => ucfirst( $name ), 'post_status' => 'inherit' ), $dest, $parent );
+	require_once ABSPATH . 'wp-admin/includes/image.php';
+	wp_update_attachment_metadata( $att, wp_generate_attachment_metadata( $att, $dest ) );
+	update_post_meta( $att, '_salon_demo', $name );
+	return $att;
+};
+
 // Locations
 $locs = array(
 	array( 'Uptown', '4120 Magazine St', 'New Orleans', 'LA', '70115', '(504) 555-0142', 29.9227, -90.1022 ),
@@ -38,6 +52,7 @@ foreach ( $locs as $i => list( $name, $street, $city, $region, $zip, $phone, $la
 	$set( $id, 'postcode', $zip );
 	$set( $id, 'hours', "Tu-Fr: 09:00-19:00\nSa: 08:00-17:00\nSu-Mo: Closed" );
 	$set( $id, 'booking_url', 'https://example.com/book/' . sanitize_title( $name ) );
+	if ( ! has_post_thumbnail( $id ) && ( $img = $photo( strtolower( $name ), $id ) ) ) { set_post_thumbnail( $id, $img ); }
 	$loc_ids[ $name ] = $id;
 }
 
@@ -69,11 +84,24 @@ foreach ( $team as $i => list( $name, $title, $level, $years, $spec, $loc, $rgb 
 	$term = term_exists( $level, 'stylist_level' ) ?: wp_insert_term( $level, 'stylist_level' );
 	wp_set_object_terms( $id, (int) $term['term_id'], 'stylist_level' );
 	$set( $id, 'job_title', $title ); $set( $id, 'years', $years ); $set( $id, 'specialties', $spec ); $set( $id, 'location', $loc_ids[ $loc ] );
-	$portrait( $id, implode( '', array_map( function ( $w ) { return $w[0]; }, explode( ' ', $name ) ) ), $rgb );
+	$img = $photo( strtolower( strtok( $name, ' ' ) ), $id );
+	if ( $img && ! has_post_thumbnail( $id ) ) { set_post_thumbnail( $id, $img ); }
+	if ( ! $img ) { $portrait( $id, implode( '', array_map( function ( $w ) { return $w[0]; }, explode( ' ', $name ) ) ), $rgb ); }
 }
 
 // Pages, menu, settings
 $home = $post( 'page', 'Home' );
+if ( ! has_post_thumbnail( $home ) && ( $img = $photo( 'hero', $home ) ) ) { set_post_thumbnail( $home, $img ); }
+update_option( 'salon_gallery', array_filter( array_map( $photo, array( 'g1', 'g2', 'g3', 'g4', 'g5' ) ) ) );
+update_option( 'salon_before_after', $photo( 'gloss' ) );
+// Fictional reviews for the demo
+update_option( 'salon_reviews', array(
+	array( 'Camille took me from brassy to the exact soft blonde I showed her. First salon that actually listened.', 'Jess R.' ),
+	array( 'Booked online at 11 pm, got a reminder text, in and out in an hour. Best fade in Uptown.', 'Marcus T.' ),
+	array( 'Lena fixed a box-dye disaster in one visit. I cried a little. Happy tears.', 'Priya S.' ),
+	array( 'The scalp ritual is the most relaxing 45 minutes of my month.', 'Dana L.' ),
+	array( 'Warm, honest about price before they start, and the coffee is good.', 'Nora B.' ),
+) );
 update_option( 'show_on_front', 'page' ); update_option( 'page_on_front', $home );
 update_option( 'blogname', 'Maison Rouge' ); update_option( 'blogdescription', 'Hair, colour and care in New Orleans.' );
 set_theme_mod( 'salon_tagline', 'Hair that feels like you.' );

@@ -3,8 +3,70 @@
 @tailwind utilities;
 
 @layer components {
-  .btn-book { @apply inline-flex items-center justify-center rounded-full bg-ink px-7 py-3 text-sm font-semibold uppercase tracking-wider text-paper transition hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent; }
-  .btn-ghost { @apply inline-flex items-center justify-center rounded-full border border-ink/25 px-7 py-3 text-sm font-semibold uppercase tracking-wider transition hover:border-ink; }
+  .btn-book { @apply inline-flex items-center justify-center rounded-full bg-ink px-7 py-3 text-sm font-semibold uppercase tracking-wider text-paper transition duration-300 hover:-translate-y-0.5 hover:bg-accent hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent; }
+  .btn-ghost { @apply inline-flex items-center justify-center rounded-full border border-ink/25 px-7 py-3 text-sm font-semibold uppercase tracking-wider transition duration-300 hover:-translate-y-0.5 hover:border-ink; }
   .btn-sm { @apply px-5 py-2 text-xs; }
-  #site-nav.is-open { @apply flex flex-col; }
+
+  /* Header */
+  [data-header] { @apply transition-all duration-300; }
+  [data-header].is-scrolled { @apply shadow-[0_8px_30px_-12px_rgb(0_0_0/0.25)]; }
+  [data-header].is-scrolled > div { @apply py-2.5; }
+
+  /* Mobile nav: slides open */
+  @media (max-width: 767px) {
+    #site-nav { display: flex !important; flex-direction: column; max-height: 0; overflow: hidden; opacity: 0; transition: max-height .4s ease, opacity .3s ease; }
+    #site-nav.is-open { max-height: 24rem; opacity: 1; }
+  }
+
+  /* Scroll reveal (only when JS runs, so content never stays hidden without it) */
+  .js [data-reveal], .js [data-stagger] > * { opacity: 0; transform: translateY(28px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); transition-delay: var(--d, 0ms); }
+  .js [data-reveal].is-in, .js [data-stagger] > .is-in { opacity: 1; transform: none; }
+
+  /* Hero: slow zoom on the photo, words rise one by one */
+  .hero-img { animation: kenburns 18s ease-out both; transform-origin: 60% 40%; }
+  .word { display: inline-block; animation: rise .9s cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(var(--i) * 90ms + 150ms); }
+  .hero-kicker { animation: rise .8s ease both; }
+  .hero-cta { animation: rise .9s ease both; animation-delay: .8s; }
+  .scroll-dot { animation: dot 1.8s ease-in-out infinite; }
+
+  /* Before / after */
+  .ba-after { clip-path: inset(0 0 0 var(--pos)); }
+  .ba-before { filter: saturate(.55) brightness(.92) contrast(.9) sepia(.18); }
+  .ba-line { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; background: #fff; transform: translateX(-1px); pointer-events: none; }
+  .ba-knob { position: absolute; top: 50%; left: 50%; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 9999px; background: #fff; color: #111; font-size: 18px; transform: translate(-50%, -50%); box-shadow: 0 6px 20px rgb(0 0 0 / .25); }
+  .ba-range { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; margin: 0; }
+  .ba-range:focus-visible + * , .ba:focus-within .ba-knob { outline: 3px solid var(--salon-accent); }
+
+  /* Gallery + lightbox */
+  .gallery { scrollbar-width: thin; }
+  .lightbox { max-width: min(92vw, 900px); padding: 0; border: 0; border-radius: 1.25rem; background: transparent; }
+  .lightbox::backdrop { background: rgb(0 0 0 / .8); backdrop-filter: blur(4px); }
+  .lightbox[open] { animation: pop .35s cubic-bezier(.2,.7,.2,1); }
+  .lightbox img { display: block; max-height: 86vh; width: auto; border-radius: 1.25rem; }
+  .lb-close { position: absolute; top: .5rem; right: .75rem; color: #fff; font-size: 2.25rem; line-height: 1; }
+
+  /* Reviews marquee */
+  .marquee { mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+  .marquee-track { width: max-content; animation: marquee 40s linear infinite; }
+  .marquee:hover .marquee-track { animation-play-state: paused; }
+
+  /* Open-now badge, menu pills, stylist filter, sticky book bar */
+  .open-badge.is-open { @apply bg-emerald-100 text-emerald-800; }
+  .open-badge.is-closed { @apply bg-ink/5 text-muted; }
+  .pill.is-active { @apply border-ink bg-ink text-paper; }
+  .menu-row { @apply -mx-3 rounded-lg px-3 transition-colors duration-200 hover:bg-ink/5; }
+  [data-stylist-card] { transition: opacity .4s ease, transform .4s ease; }
+  [data-stylist-card].is-entering { opacity: 0; transform: scale(.96); }
+  .book-bar.is-shown { transform: none; }
+}
+
+@keyframes kenburns { from { transform: scale(1.12); } to { transform: scale(1); } }
+@keyframes rise { from { opacity: 0; transform: translateY(0.6em); } to { opacity: 1; transform: none; } }
+@keyframes dot { 0%, 100% { transform: translateY(0); opacity: 1; } 60% { transform: translateY(10px); opacity: .2; } }
+@keyframes marquee { to { transform: translateX(-50%); } }
+@keyframes pop { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .js [data-reveal], .js [data-stagger] > * { opacity: 1; transform: none; }
 }

@@ -10,7 +10,13 @@ A fix in the parent reaches every site; a client's look never needs a new CSS bu
 
 **Live demo:** [open it in WordPress Playground](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/adelsherif8/wp-salon-starter/main/blueprint.json) (a real WordPress in your browser, with the themes and the demo salon installed; takes about 30 seconds to boot; logged in as admin so you can see the fields).
 
+![Hero](docs/hero.jpg)
+
+<details><summary>Full home page</summary>
+
 ![Home](docs/home.jpg)
+
+</details>
 
 | Service menu | Find your stylist |
 | --- | --- |
@@ -31,6 +37,8 @@ A fix in the parent reaches every site; a client's look never needs a new CSS bu
 | GA4 / GTM | `inc/tracking.php`, `assets/app.js` | GTM container from the Customizer; `book_now_click`, `phone_click`, `directions_click`, `stylist_filter` pushed to the `dataLayer` |
 | Gravity Forms | `inc/gravity-forms.php` | Fills a "salon-locations" field from the Locations, and pushes `generate_lead` on confirmation. **Written against the documented hooks but not run here** (Gravity Forms needs a licence) |
 | HTML email | `emails/holiday-gloss.html` | Table layout, inline CSS, VML button for Outlook, dark-mode tweaks, Mailchimp merge tags (`*\|FNAME\|*`, `*\|UNSUB\|*`, `*\|LIST:ADDRESSLINE\|*`) |
+| Interactions (no libraries) | `assets/app.js`, `assets/src/input.css` | Scroll-reveal with stagger, hero photo slow-zoom + word-by-word headline, compact header on scroll, drag-to-compare before/after slider (keyboard-accessible range input), swipe gallery with a native `<dialog>` lightbox, reviews marquee, "Open now" badges computed from each location's hours in New Orleans time, sticky "Book now" bar on phones, menu section pills that follow your scroll, animated stylist filter. All of it switches off for `prefers-reduced-motion` |
+| Demo photos | `assets/demo/` | Unsplash License, listed in `assets/demo/CREDITS.md`. The demo seed imports them as attachments |
 | Customizer | `inc/brand.php` | GTM ID, default booking URL, schema type, hero tagline: things an account manager can change without a developer |
 
 ### ACF free vs PRO
