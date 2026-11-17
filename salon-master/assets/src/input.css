@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .btn-book { @apply inline-flex items-center justify-center rounded-full bg-ink px-7 py-3 text-sm font-semibold uppercase tracking-wider text-paper transition hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent; }
+  .btn-ghost { @apply inline-flex items-center justify-center rounded-full border border-ink/25 px-7 py-3 text-sm font-semibold uppercase tracking-wider transition hover:border-ink; }
+  .btn-sm { @apply px-5 py-2 text-xs; }
+  #site-nav.is-open { @apply flex flex-col; }
+}

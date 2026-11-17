@@ -1,0 +1,10 @@
+{
+  "core": null,
+  "phpVersion": "8.2",
+  "port": 8891,
+  "testsPort": 8892,
+  "themes": ["./salon-master", "./salon-child-maison"],
+  "plugins": ["https://downloads.wordpress.org/plugin/advanced-custom-fields.zip"],
+  "mappings": { "demo": "./demo" },
+  "config": { "WP_DEBUG": true, "WP_DEBUG_LOG": true, "WP_DEBUG_DISPLAY": false }
+}
