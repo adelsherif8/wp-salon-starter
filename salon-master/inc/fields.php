@@ -53,6 +53,7 @@ add_action( 'acf/init', function () {
 			$field( 'specialties', 'Specialties (one per line)', 'textarea', array( 'rows' => 4 ) ),
 			$field( 'location', 'Works at', 'post_object', array( 'post_type' => array( 'salon_location' ), 'return_format' => 'id' ) ),
 			$field( 'booking_url', 'Book with this stylist (URL)', 'url' ),
+			$field( 'instagram', 'Instagram handle' ),
 		),
 	) );
 	acf_add_local_field_group( array(
